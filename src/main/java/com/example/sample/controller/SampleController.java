@@ -6,18 +6,27 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 public class SampleController {
 
-    @GetMapping("/sample")
+    @GetMapping("/")
+    public ModelAndView someTemplate() {
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("home");
+        return mav;
+    }
+
+    @RequestMapping("/sample")
     public String getSample(final HttpServletRequest request, final HttpServletResponse response
-        , @CookieValue(name = "visited") String visited) {
+        , @CookieValue(name = "visited", required = false, defaultValue = "0") String visited) {
         int a = Integer.parseInt(visited);
         int b = a + 1;
         String value = Integer.toString(b);
-        setCookie(request, response, "/sample", "visited", value, 300);
+        setCookie(request, response, "/sample", "visited", value, 10);
         return value;
     }
 
